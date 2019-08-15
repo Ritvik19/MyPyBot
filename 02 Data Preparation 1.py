@@ -3,7 +3,7 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from tqdm.auto import tqdm
 import pandas as pd
 import re
-print('Libraries Imported')
+import time, datetime
 
 def get_tokens(corpus):
     tokens = []
@@ -12,22 +12,31 @@ def get_tokens(corpus):
             tokens.append(t)
     return tokens
 
-data = pd.read_csv('E:/Scrapped-Data/blogs/posts/posts.csv')
-print('File Read')
+def timestamp():
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S:')
+    return st
+
+print(timestamp(), 'Libraries Imported')
+
+
+
+data = pd.read_csv('E:/Scrapped-Data/blogs/posts/posts.csv').sample(frac=0.2)
+print(timestamp(), 'File Read')
 
 sentences = []
 for d in tqdm(data.values):
     sentences += sent_tokenize(str(d))
-print('Sentences Tokenized', len(sentences))
+print(timestamp(), 'Sentences Tokenized', len(sentences))
 
 sentences = list(set(sentences))
-print('Duplicates Removed', len(sentences))
+print(timestamp(), 'Duplicates Removed', len(sentences))
 
 sentences = '.\n'.join(sentences)
-print('Corpus Created')
+print(timestamp(), 'Corpus Created')
 
 tokens = get_tokens(sentences)
-print('Data Tokenized', len(tokens))
+print(timestamp(), 'Data Tokenized', len(tokens))
 
 pd.DataFrame({'tokens':tokens}).to_csv('E:/Scrapped-Data/blogs/posts/tokens.csv', index=False)
-print('File Saved')
+print(timestamp(), 'File Saved')
