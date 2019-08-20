@@ -1,7 +1,6 @@
 import pandas as pd
 from nltk.tokenize import word_tokenize, sent_tokenize
 from tqdm.auto import tqdm
-import pandas as pd
 import re
 import time, datetime
 
@@ -21,7 +20,7 @@ print(timestamp(), 'Libraries Imported')
 
 
 
-data = pd.read_csv('E:/Scrapped-Data/blogs/posts/posts.csv').sample(frac=0.2)
+data = pd.read_csv('E:/Scrapped-Data/blogs/posts/posts.csv').sample(frac=0.1)
 print(timestamp(), 'File Read')
 
 sentences = []
