@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# **Libraries**
-
-# In[1]:
-
-
 import sys, os
 from tqdm.auto import tqdm
 import time, datetime
@@ -13,50 +5,20 @@ from nltk import ngrams
 import json, re
 from collections import Counter, defaultdict
 
-
-# **REGEX** for data cleaning
-
-# In[2]:
-
-
 DOCSTRING_REGEX = re.compile(r"\"\"\"(.|\n)*?\"\"\"")
 COMMENT_REGEX = re.compile(r"#.*")
 NOT_WORDS_REGEX = re.compile(r"[^a-zA-Z]")
 EXTRAWHITESPACES_REGEX = re.compile(r"\s+")
 
 
-# **DIRECTORIES**
-
-# In[3]:
-
-
-PYTHON_DIR = ['D:\\Users\\Ritvik\\Anaconda3\\envs\\datascience\\lib', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\nlp_course\\lib',
+PYTHON_DIR = ['D:\\Users\\Ritvik\\Anaconda3\\pkgs', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\datascience\\lib', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\nlp_course\\lib',
              'D:\\Users\\Ritvik\\Anaconda3\\envs\\Pyradox\\lib', 'D://Users//Ritvik//Anaconda3//envs\\tensorflow\\lib', 
-             'D:\\Users\\Ritvik\\Anaconda3\\envs\\tfdeeplearning\\lib', 'D:\\Users\\Ritvik\\Anaconda3\\pkgs']
-
-
-# **Model Initialization**
-
-# In[4]:
-
-
-model = defaultdict(lambda: defaultdict(lambda: 0))
-n = 3
-
-
-# **Training Function**
-
-# In[5]:
-
+             'D:\\Users\\Ritvik\\Anaconda3\\envs\\tfdeeplearning\\lib']
 
 def train(dataString):
     word_grams = ngrams(dataString.split(), n+1, pad_left=True, pad_right=True, left_pad_symbol='', right_pad_symbol='')
     for w in word_grams:
         model[w[:-1]][w[-1]] += 1
-
-
-# In[6]:
-
 
 def normalize():
     for w1 in model:
@@ -73,28 +35,16 @@ def normalize():
     del droplist
 
 
-# **Pickling**
-
-# In[7]:
-
-
 DIR = 'E:/Models/MyPyBot-Probabilistic'
-os.mkdir(DIR)
+if not os.path.exists(DIR):
+    os.mkdir(DIR)
 
-
-# In[8]:
-
-
-def save_model():
-    with open(f'{DIR}/model.json', 'w') as f:
+def save_model(i):
+    with open(f'{DIR}/model-{i}.json', 'w') as f:
         k = model.keys() 
         v = model.values() 
         k1 = [str(i) for i in k]
         json.dump(json.dumps(dict(zip(*[k1,v]))),f)     
-
-
-# In[ ]:
-
 
 def load_model():
     with open(f'{DIR}/model.json', 'r') as f:
@@ -105,17 +55,12 @@ def load_model():
         k1 = [eval(i) for i in k] 
         return dict(zip(*[k1,v]))
 
-
-# **Training**
-
-# In[ ]:
-
-
-unicode_count = 0
 count = 0
 bytes_ = 0
-
-for DIR in tqdm(PYTHON_DIR):
+i = 0
+for DIR in PYTHON_DIR:
+    model = defaultdict(lambda: defaultdict(lambda: 0))
+    n = 3
     for path, directories, files in tqdm(os.walk(DIR)):
         for file in files:
             if file.endswith('.py'):
@@ -131,21 +76,14 @@ for DIR in tqdm(PYTHON_DIR):
                         bytes_ += os.stat(os.path.join(path, file)).st_size
                         count += 1
                 except UnicodeDecodeError:
-                    unicode_count += 1
+                    pass
                 except Exception as e:
                     print(os.path.join(path, file) ,str(e))
-    save_model()
+    i += 1                    
+    save_model(i)
     print(f"trained on {count} files")
     print(f"{bytes_} bytes ({bytes_/(1024*1024)} mega bytes) of data")
     print(f"size of the model: {sys.getsizeof(model)/(1024*1024)} mega bytes")
-normalize()
-print(f"size of the model(normalized): {sys.getsizeof(model)/(1024*1024)} mega bytes")
-
-
-# **Predict Function**
-
-# In[ ]:
-
 
 def predict(query):
     try:
@@ -162,10 +100,3 @@ def predict(query):
     except Exception as e:
         print(e)
         return ''
-
-
-# In[ ]:
-
-
-
-
