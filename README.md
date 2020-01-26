@@ -4,10 +4,14 @@ A Probabilistic Word-level Language Model for Python Programming
 
 It predicts the next token based on the previous three tokens
 
-There are two major parts of the code:
-1. Data Preparation : Collecting the python code from the libraries installed on the local system
-2. Model Building   : Trained on:
+There are two major phases of the approach:
+1. Data Preparation : Collecting the python code from the libraries installed on the local system, and cleaning it
+2. Data Preprocessing: Creating n-grams
+3. Model Building   : Training on the n-grams
+___
 
-[Kaggle Kernel](https://www.kaggle.com/ritvik1909/mypybot) using data from the first directory only
+### About the data:
 
-[Google Colaoratory](https://colab.research.google.com/drive/1dqALTey2BD-jdxRFBDzJXp0Krw7_mIYy) using data from all directories
+639553 files of python code, 
+<br>
+i.e. almost 14.81 GB of python code

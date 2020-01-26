@@ -10,7 +10,7 @@ NOT_WORDS_REGEX = re.compile(r"[^a-zA-Z]")
 EXTRAWHITESPACES_REGEX = re.compile(r"\s+")
 
 PYTHON_DIR = ['D:\\Users\\Ritvik\\Anaconda3\\pkgs', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\datascience\\lib', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\nlp_course\\lib',
-              'D:\\Users\\Ritvik\\Anaconda3\\envs\\Pyradox\\lib', 'D://Users//Ritvik//Anaconda3//envs\\tensorflow\\lib', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\tfdeeplearning\\lib']
+             'D:\\Users\\Ritvik\\Anaconda3\\envs\\Pyradox\\lib', 'D://Users//Ritvik//Anaconda3//envs\\tensorflow\\lib', 'D:\\Users\\Ritvik\\Anaconda3\\envs\\tfdeeplearning\\lib']
 
 
 def process(dataString, n, i):
@@ -18,9 +18,11 @@ def process(dataString, n, i):
     dataString = COMMENT_REGEX.sub(' ', dataString)
     dataString = NOT_WORDS_REGEX.sub(' ', dataString)
     dataString = EXTRAWHITESPACES_REGEX.sub(' ', dataString)
-    word_grams = ngrams(dataString.split(), n+1, pad_left=True,
-                        pad_right=True, left_pad_symbol='', right_pad_symbol='')
-    json.dump(list(word_grams), open(f"../data/datafile-{i}.json", 'w'))
+    with open(f"../data/datafile-{i}.txt", 'w') as f:
+        f.write(dataString)
+    # word_grams = ngrams(dataString.split(), n+1, pad_left=True,
+    #                     pad_right=True, left_pad_symbol='', right_pad_symbol='')
+    # json.dump(list(word_grams), open(f"../data/datafile-{i}.json", 'w'))
 
 
 count = 0
