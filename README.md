@@ -12,6 +12,6 @@ ___
 
 ### About the data:
 
-639553 files of python code, 
+6,39,553 files of python code, 
 <br>
 i.e. almost 14.81 GB of python code
